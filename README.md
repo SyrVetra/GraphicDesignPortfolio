@@ -2,6 +2,9 @@
 
 A static website (plain HTML/CSS/JS, no build step).
 
+**Live site:** https://syrvetra.github.io/GraphicDesignPortfolio/
+(once GitHub Pages is turned on, see "Publishing" below)
+
 - **Home** (`yoursite.com/`): one scrolling page with four sections:
   1. **Intro**: your name and a one-line headline.
   2. **Selected work** (`#work`): a rotating ring of thumbnails. It turns by itself until
@@ -22,7 +25,7 @@ A static website (plain HTML/CSS/JS, no build step).
   returns to the selector.
 
 ```
-portfolio/
+GraphicDesignPortfolio/
 ├── index.html     page shell (rarely needs editing)
 ├── content.js     ← ALL your text and image paths live here
 ├── styles.css     colours, fonts, sizes (tokens at the top)
@@ -69,8 +72,19 @@ Edit the tokens at the top of `styles.css`: `--accent` is the highlight colour,
 `--bg` the background, `--item` the selector thumbnail size. Fonts load from Google Fonts in
 `index.html`; swap the families there and in the `--f-*` tokens.
 
-## Previewing and publishing
+## Previewing
 
-Open `index.html` in a browser to preview locally. To publish, upload the whole
-folder to any static host: Netlify Drop (drag the folder in), GitHub Pages,
-Vercel, Cloudflare Pages, or your own web server.
+Download the repository (**Code → Download ZIP**), unzip it and open `index.html`
+in a browser.
+
+## Publishing (GitHub Pages)
+
+1. The repository must be **public** (Settings → General → Danger Zone →
+   Change visibility), unless you have a paid GitHub plan.
+2. Settings → **Pages** → Source: **Deploy from a branch** → Branch: **main**,
+   folder **/ (root)** → **Save**.
+3. After a minute or two the site is live at
+   https://syrvetra.github.io/GraphicDesignPortfolio/
+
+Every change pushed or uploaded to `main` goes live automatically within a minute
+or two. The flip-book version is at `/flipbook-v1/`.
