@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Discography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="flipbook-v1/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <span id="brand"></span>
+  <span class="hint">← → keys · scroll · swipe · click a page</span>
+</header>
+
+<main class="stage" id="stage">
+  <div class="book" id="book"></div>
+</main>
+
+<nav class="controls" aria-label="Book navigation">
+  <button type="button" id="prev" aria-label="Previous page">←</button>
+  <div class="status" aria-live="polite">
+    <span id="status-label"></span>
+    <span id="status-count"></span>
+  </div>
+  <button type="button" id="contents">Contents</button>
+  <button type="button" id="next" aria-label="Next page">→</button>
+</nav>
+
+<div class="lightbox" id="lightbox" hidden>
+  <figure>
+    <img id="lb-img" alt="">
+    <figcaption id="lb-cap"></figcaption>
+  </figure>
+  <button type="button" id="lb-close">Close</button>
+</div>
+
+<script src="content.js"></script>
+<script src="flipbook-v1/book.js"></script>
+</body>
+</html>
