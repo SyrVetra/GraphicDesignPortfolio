@@ -5,12 +5,12 @@
    Pages (each has its own link):
      yoursite.com/           home: intro, rotating selector, bio & history, contact
      yoursite.com/#about     home, scrolled to a section (#work, #about, #contact)
-     yoursite.com/#yn-001    a project page */
+     yoursite.com/#yn-001    a project page
+     yoursite.com/?edit      opens the editor (editor.js) beside the site */
 (() => {
   "use strict";
 
-  const C = window.PORTFOLIO || {};
-  const contact = C.contact || {};
+  let C, contact, works, N; // set by load()
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const esc = (s) =>
@@ -21,24 +21,32 @@
   const mod = (n, m) => ((n % m) + m) % m;
   const $ = (id) => document.getElementById(id);
 
-  const works = (C.releases || []).map((r, i) => {
-    const catalog = r.catalog || `${C.catalogPrefix || "CAT"}-${String(i + 1).padStart(3, "0")}`;
-    return { ...r, i, catalog, slug: slugify(r.slug || catalog) };
-  });
-  const N = works.length;
+  // the editor previews freshly chosen images before they're uploaded
+  const previewSrc = (src) => (window.PORTFOLIO_PREVIEW_SRC || {})[src] || src;
 
   function slot(src, hint, { fit, alt = "" } = {}) {
     const empty = !src;
     return (
       `<div class="slot${empty ? " is-empty" : ""}"${fit ? ` data-fit="${esc(fit)}"` : ""}>` +
-      (empty ? "" : `<img src="${esc(src)}" alt="${esc(alt)}" decoding="async" draggable="false" onerror="this.parentNode.classList.add('is-empty')">`) +
+      (empty ? "" : `<img src="${esc(previewSrc(src))}" alt="${esc(alt)}" decoding="async" draggable="false" onerror="this.parentNode.classList.add('is-empty')">`) +
       `<div class="slot-empty"><span>${esc(hint)}</span><code>${esc(src || "add a path in content.js")}</code></div></div>`
     );
   }
   const metaLine = (w) => [w.catalog, w.format, w.year].filter(Boolean).map(esc).join(" · ");
 
   const app = $("app");
-  $("brand").textContent = C.designer || "";
+
+  function load(data) {
+    C = data || {};
+    contact = C.contact || {};
+    works = (C.releases || []).map((r, i) => {
+      const catalog = r.catalog || `${C.catalogPrefix || "CAT"}-${String(i + 1).padStart(3, "0")}`;
+      return { ...r, i, catalog, slug: slugify(r.slug || catalog) };
+    });
+    N = works.length;
+    $("brand").textContent = C.designer || "";
+  }
+  load(window.PORTFOLIO);
 
   // ── routing ──────────────────────────────────────────
   function route() {
@@ -483,9 +491,9 @@
     dim.hidden = peek.hidden = true;
   }
 
-  if (C.hoverPreview !== false && matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
     document.addEventListener("pointermove", (e) => {
-      if (e.pointerType !== "mouse") return;
+      if (e.pointerType !== "mouse" || C.hoverPreview === false) return;
       const t = e.target.closest && e.target.closest("[data-peek]");
       const dragging = stageEl && stageEl.classList.contains("dragging");
       if (!t || dragging || e.buttons) {
@@ -531,7 +539,7 @@
 
   document.addEventListener("keydown", (e) => {
     if (!lightbox.hidden) { if (e.key === "Escape") closeLightbox(); return; }
-    if (e.target.closest && e.target.closest("input, textarea")) return;
+    if (e.target.closest && e.target.closest("input, textarea, select, .ed")) return;
     const r = route();
     if (r.view === "home" && N && ring) {
       const box = stageEl.getBoundingClientRect();
@@ -553,4 +561,29 @@
   });
 
   render();
+
+  // used by the editor to redraw the site as content changes
+  window.PORTFOLIO_SITE = {
+    load,
+    rerender() {
+      const y = window.scrollY;
+      if (lastWork) lastWork = works[lastWork.i] || null;
+      // stay on the piece being edited even if its address changed
+      if (lastView === "work" && lastWork && location.hash !== `#${lastWork.slug}`) {
+        history.replaceState(null, "", `#${lastWork.slug}`);
+      }
+      render();
+      window.scrollTo(0, y);
+    },
+    openWork(i) { if (works[i]) navigate(works[i].slug); },
+    goHome(section) { navigate(section || ""); },
+  };
+  if (/[?&]edit(=|&|$)/.test(location.search)) {
+    const css = document.createElement("link");
+    css.rel = "stylesheet";
+    css.href = "editor.css";
+    const js = document.createElement("script");
+    js.src = "editor.js";
+    document.head.append(css, js);
+  }
 })();

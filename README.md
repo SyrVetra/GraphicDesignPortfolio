@@ -30,11 +30,48 @@ GraphicDesignPortfolio/
 ├── content.js     ← ALL your text and image paths live here
 ├── styles.css     colours, fonts, sizes (tokens at the top)
 ├── site.js        selector + page engine
+├── editor.js      the in-browser editor (loads only with ?edit)
+├── editor.css     editor panel styles
 ├── images/        ← put your graphics here
 └── flipbook-v1/   the earlier flip-book version (uses the same content.js)
 ```
 
-## Adding your work
+## Editing in the browser
+
+Open the site with `?edit` at the end of the address:
+
+**https://syrvetra.github.io/GraphicDesignPortfolio/?edit**
+
+An editing panel opens beside the live site, and the site updates as you type.
+
+- **Work:** add, remove and reorder pieces. Open a piece to edit its details, choose
+  its thumbnail, large art and extra images, and write its description and sections.
+  The preview jumps to that piece's page.
+- **About:** headline, portrait, bio, personal-history timeline and side lists.
+- **Contact:** email, location, availability, links and footer note.
+- **Site:** your name, tagline, catalogue prefix and selector settings.
+- **Publish:** uploads new images and your changes to GitHub. The live site updates
+  within a minute or two.
+
+Changes are kept as a draft in your browser until you publish, so you can close the
+tab and come back. Images you've chosen but not yet published are the exception:
+publish before closing, or choose them again.
+
+**One-time setup for Publish:** the editor needs a GitHub access token. It stays in
+your browser and is only sent to GitHub.
+1. Open https://github.com/settings/personal-access-tokens/new
+2. Give it a name and an expiry date.
+3. Repository access: **Only select repositories** → `GraphicDesignPortfolio`.
+4. Permissions → Repository permissions → **Contents: Read and write**.
+5. Generate it, copy it, and paste it into the editor's Publish tab.
+
+Without a token you can use **Download content.js** and upload it (plus any new
+images, into `images/`) on github.com instead.
+
+Visitors who open `?edit` can play with the panel, but nothing reaches the live site
+without your token.
+
+## Adding your work by hand
 
 1. Copy your graphics into `images/`.
 2. Open `content.js` and, for each release, set
